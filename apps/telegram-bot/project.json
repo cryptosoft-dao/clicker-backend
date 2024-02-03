@@ -1,0 +1,24 @@
+{
+  "name": "telegram-bot",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/telegram-bot/src",
+  "projectType": "application",
+  "targets": {
+    "serve": {
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "telegram-bot:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "telegram-bot:build:development"
+        },
+        "production": {
+          "buildTarget": "telegram-bot:build:production"
+        }
+      }
+    }
+  },
+  "tags": []
+}

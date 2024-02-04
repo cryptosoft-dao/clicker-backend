@@ -1,21 +1,17 @@
+import { BackendProtocol } from '@aofg/backend-protocol';
+import { ConfigurationService } from '@aofg/configuration';
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app/app.module';
-import { MicroserviceOptions, Transport } from '@nestjs/microservices';
+import { MicroserviceOptions } from '@nestjs/microservices';
+import { BackendAppModule } from './app/backend-app.module';
 
 async function bootstrap() {
-  console.log(process.env.RABBITMQ_URL)
-  const app = await NestFactory.createMicroservice<MicroserviceOptions>(AppModule, {
-    transport: Transport.RMQ,
-    options: {
-      urls: [process.env.RABBITMQ_URL],
-      queue: process.env.RABBITMQ_QUEUE_NAME,
-      queueOptions: {
-        durable: false
-      },
-    },
-  });
-
-  await app.listen();
+    const app = await NestFactory.create(BackendAppModule);
+    const configService = app.get(ConfigurationService);
+    app.connectMicroservice<MicroserviceOptions>(
+        configService.clientConfig(BackendProtocol.channel)
+    );
+    await app.startAllMicroservices();
+    await app.init();
 }
 
 bootstrap();

@@ -1,0 +1,8 @@
+{
+    "name": "backend-protocol",
+    "$schema": "../node_modules/nx/schemas/project-schema.json",
+    "sourceRoot": "backend-protocol/src",
+    "projectType": "library",
+    "targets": {},
+    "tags": []
+}

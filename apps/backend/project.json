@@ -12,7 +12,9 @@
       },
       "configurations": {
         "development": {
-          "buildTarget": "backend:build:development"
+          "buildTarget": "backend:build:development",
+          "inspect": true,
+          "port": 9230
         },
         "production": {
           "buildTarget": "backend:build:production"

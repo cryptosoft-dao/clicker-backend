@@ -12,7 +12,9 @@
       },
       "configurations": {
         "development": {
-          "buildTarget": "discord-bot:build:development"
+          "buildTarget": "discord-bot:build:development",
+          "inspect": true,
+          "port": 9231
         },
         "production": {
           "buildTarget": "discord-bot:build:production"

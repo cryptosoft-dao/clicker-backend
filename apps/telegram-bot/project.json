@@ -12,7 +12,9 @@
       },
       "configurations": {
         "development": {
-          "buildTarget": "telegram-bot:build:development"
+          "buildTarget": "telegram-bot:build:development",
+          "inspect": true,
+          "port": 9232
         },
         "production": {
           "buildTarget": "telegram-bot:build:production"

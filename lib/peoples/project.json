@@ -1,0 +1,8 @@
+{
+    "name": "peoples",
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
+    "sourceRoot": "lib/peoples/src",
+    "projectType": "library",
+    "targets": {},
+    "tags": []
+}

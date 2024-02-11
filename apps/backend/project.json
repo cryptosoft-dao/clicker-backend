@@ -4,6 +4,18 @@
   "sourceRoot": "apps/backend/src",
   "projectType": "application",
   "targets": {
+    "build-configuration": {
+      "executor": "@nx/webpack:webpack",
+      "outputs": [
+        "{options.outputPath}"
+      ],
+      "options": {
+        "outputPath": "dist/apps/typeorm-migration",
+        "main": "apps/backend/src/typeorm.config.ts",
+        "tsConfig": "apps/backend/tsconfig.app.json",
+        "webpackConfig": "apps/backend/webpack.config.js"
+      }
+    },
     "serve": {
       "executor": "@nx/js:node",
       "defaultConfiguration": "development",

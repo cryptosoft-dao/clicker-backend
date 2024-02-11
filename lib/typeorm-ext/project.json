@@ -1,0 +1,8 @@
+{
+    "name": "typeorm-ext",
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
+    "sourceRoot": "lib/typeorm-ext/src",
+    "projectType": "library",
+    "targets": {},
+    "tags": []
+}

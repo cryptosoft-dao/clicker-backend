@@ -42,17 +42,19 @@
             "dependsOn": ["build"],
             "options": {
                 "engine": "docker",
+                "push": true,
                 "metadata": {
                     "images": ["ghcr.io/aofg/backend"],
-                    "push": true,
                     "cache-from": ["type=gha"],
                     "cache-to": ["type=gha,mode=max"],
                     "tags": [
                         "type=ref,event=branch",
                         "type=ref,event=tag",
                         "type=sha",
-                        "type=sha,format=long",
-                        "ghcr.io/aofg/backend:latest"
+                        "type=semver,pattern={{version}}",
+                        "type=semver,pattern={{major}}.{{minor}}",
+                        "type=semver,pattern={{major}}",
+                        "type=sha,format=long"
                     ]
                 }
             }

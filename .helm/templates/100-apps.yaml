@@ -83,7 +83,6 @@ spec:
       services:
         - name: aofg
           port: 80
-  routes:
     - match: "Host(`api.{{ $.Release.Namespace }}.aofg.io`)"
       kind: Rule
       middlewares:

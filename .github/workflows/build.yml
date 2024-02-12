@@ -69,7 +69,7 @@ jobs:
 
             - run: npm ci
             - uses: nrwl/nx-set-shas@v4
-            
+
             - name: Set environment variables
               run: |
                   HELM_SHORT=`echo "${{ github.event.repository.name }}" | cut -c -52`

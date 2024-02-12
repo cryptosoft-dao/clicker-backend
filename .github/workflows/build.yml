@@ -67,5 +67,5 @@ jobs:
             - name: Deploy
               if: github.ref == 'refs/heads/main' || matrix.namespace != 'production'
               run: |
-                  helm upgrade --install $HELM_SHORT ./.helm --namespace ${{ matrix.namespace }} --set image=${{ steps.meta.outputs.tags }}:sha-${{ NX_BASE }} --set branch=$GIT_BRANCH --dry-run
-                  helm upgrade --install $HELM_SHORT ./.helm --namespace ${{ matrix.namespace }} --set image=${{ steps.meta.outputs.tags }}:sha-${{ NX_BASE }} --set branch=$GIT_BRANCH --wait
+                  helm upgrade --install $HELM_SHORT ./.helm --namespace ${{ matrix.namespace }} --set image=${{ env.REGISTRY }}/${{ env.BACKEND_IMAGE }}:sha-${{ NX_BASE }} --set branch=$GIT_BRANCH --dry-run
+                  helm upgrade --install $HELM_SHORT ./.helm --namespace ${{ matrix.namespace }} --set image=${{ env.REGISTRY }}/${{ env.BACKEND_IMAGE }}:sha-${{ NX_BASE }} --set branch=$GIT_BRANCH --wait

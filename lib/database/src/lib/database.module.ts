@@ -8,22 +8,21 @@ import * as entities from './entities';
 
 @Injectable()
 export class DatabaseService implements TypeOrmOptionsFactory {
-  constructor(private config: ConfigurationService) {}
+    constructor(private config: ConfigurationService) {}
 
-  createTypeOrmOptions() : TypeOrmModuleOptions {
-    const db = this.config.db;
-    return {
-      ...db,
-      ssl: db.ssl ? { rejectUnauthorized: false } : undefined,
-      entities,
-      migrations,
-      synchronize: false,
-      migrationsTableName: 'migrations',
-      migrationsRun: true,
-    };
-  }
+    createTypeOrmOptions(): TypeOrmModuleOptions {
+        const db = this.config.db;
+        return {
+            ...db,
+            ssl: db.ssl ? { rejectUnauthorized: false } : undefined,
+            entities,
+            migrations,
+            synchronize: false,
+            migrationsTableName: 'migrations',
+            migrationsRun: true,
+        };
+    }
 }
-
 
 @Module({
     imports: [ConfigurationModule],

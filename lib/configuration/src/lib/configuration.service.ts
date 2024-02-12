@@ -16,8 +16,10 @@ export class ConfigurationService {
 
     get admin() {
         return {
-            password: this.configService.getOrThrow('ADMIN_PASSWORD', { infer: true }),
-        }
+            password: this.configService.getOrThrow('ADMIN_PASSWORD', {
+                infer: true,
+            }),
+        };
     }
 
     get jwt(): JwtModuleOptions {

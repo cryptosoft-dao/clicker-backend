@@ -7,9 +7,7 @@ import { PricipalDto } from '../auth.dto';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
-    constructor(
-        configService: ConfigurationService,
-    ) {
+    constructor(configService: ConfigurationService) {
         super(
             {
                 jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),

@@ -18,8 +18,8 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 };
 
 async function bootstrap() {
-    console.log('test')
-    
+    console.log('test');
+
     const app = await NestFactory.create(BackendAppModule);
     const configService = app.get(ConfigurationService);
     app.connectMicroservice<MicroserviceOptions>(

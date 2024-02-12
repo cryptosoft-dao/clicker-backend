@@ -7,18 +7,12 @@
             "name": "Debug backend",
             "cwd": "${workspaceFolder}",
             "runtimeExecutable": "nx",
-            "runtimeArgs": [
-                "serve",
-                "backend",
-                "--inspect"
-            ],
+            "runtimeArgs": ["serve", "backend", "--inspect"],
             "skipFiles": [
                 "<node_internals>/**",
                 "${workspaceFolder}/node_modules/*"
             ],
-            "outFiles": [
-                "${workspaceFolder}/dist/**/*.js"
-            ]
+            "outFiles": ["${workspaceFolder}/dist/**/*.js"]
         }
         // repeat for each debuggable app
     ]

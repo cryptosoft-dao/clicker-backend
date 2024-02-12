@@ -1,26 +1,26 @@
 {
-  "name": "discord-bot",
-  "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "apps/discord-bot/src",
-  "projectType": "application",
-  "targets": {
-    "serve": {
-      "executor": "@nx/js:node",
-      "defaultConfiguration": "development",
-      "options": {
-        "buildTarget": "discord-bot:build"
-      },
-      "configurations": {
-        "development": {
-          "buildTarget": "discord-bot:build:development",
-          "inspect": true,
-          "port": 9231
-        },
-        "production": {
-          "buildTarget": "discord-bot:build:production"
+    "name": "discord-bot",
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
+    "sourceRoot": "apps/discord-bot/src",
+    "projectType": "application",
+    "targets": {
+        "serve": {
+            "executor": "@nx/js:node",
+            "defaultConfiguration": "development",
+            "options": {
+                "buildTarget": "discord-bot:build"
+            },
+            "configurations": {
+                "development": {
+                    "buildTarget": "discord-bot:build:development",
+                    "inspect": true,
+                    "port": 9231
+                },
+                "production": {
+                    "buildTarget": "discord-bot:build:production"
+                }
+            }
         }
-      }
-    }
-  },
-  "tags": []
+    },
+    "tags": []
 }

@@ -10,7 +10,6 @@ export * from './auth.dto';
 export * from './auth/auth.service';
 export * from './decorators';
 
-
 @Controller('auth')
 export class AuthController {
     constructor(private readonly authService: AuthService) {}
@@ -28,7 +27,8 @@ export class AuthController {
         JwtModule.registerAsync({
             imports: [ConfigurationModule],
             inject: [ConfigurationService],
-            useFactory: async (configService: ConfigurationService) => configService.jwt,
+            useFactory: async (configService: ConfigurationService) =>
+                configService.jwt,
         }),
     ],
     controllers: [AuthController],

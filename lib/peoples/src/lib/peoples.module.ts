@@ -1,9 +1,5 @@
 import { TypeOrmExModule } from '@aofg/typeorm-ext';
-import {
-    Injectable,
-    Module,
-    NotFoundException
-} from '@nestjs/common';
+import { Injectable, Module, NotFoundException } from '@nestjs/common';
 import { EntityManager, MoreThanOrEqual } from 'typeorm';
 import { Member, MemberRepository } from './member.entity';
 export * from './member.entity';

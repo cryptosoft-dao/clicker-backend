@@ -42,7 +42,7 @@ import { Context } from '../interfaces/context.interface';
                             'chat_join_request',
                             'chat_boost',
                             'removed_chat_boost',
-                        ]
+                        ],
                     },
                     middlewares: [
                         async (ctx: Context, next: () => Promise<void>) => {

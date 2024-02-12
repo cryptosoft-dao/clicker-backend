@@ -10,7 +10,7 @@ async function bootstrap() {
         configService.clientConfig('TELEGRAM_BOT')
     );
     await app.startAllMicroservices();
-    await app.init()
+    await app.init();
 }
 
 bootstrap();

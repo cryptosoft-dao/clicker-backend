@@ -11,7 +11,9 @@ import { ClassConstructor } from 'class-transformer';
 
 export const TYPEORM_EX_CUSTOM_REPOSITORY = 'TYPEORM_EX_CUSTOM_REPOSITORY';
 
-export function CustomRepository<T>(entity: ClassConstructor<T>): ClassDecorator {
+export function CustomRepository<T>(
+    entity: ClassConstructor<T>
+): ClassDecorator {
     return SetMetadata(TYPEORM_EX_CUSTOM_REPOSITORY, entity);
 }
 

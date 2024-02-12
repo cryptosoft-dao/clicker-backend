@@ -40,7 +40,7 @@ export class GuildsService {
         private readonly dataSource: DataSource,
         private readonly guilds: GuildRepository,
         private readonly members: MemberRepository,
-        private readonly people: PeopleService,
+        private readonly people: PeopleService
     ) {}
 
     checkAccess(principal: PricipalDto, slug: string) {

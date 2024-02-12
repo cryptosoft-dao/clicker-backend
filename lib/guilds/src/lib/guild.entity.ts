@@ -11,7 +11,7 @@ import {
     Index,
     OneToMany,
     PrimaryGeneratedColumn,
-    Repository
+    Repository,
 } from 'typeorm';
 
 @Entity('Guild')
@@ -19,14 +19,14 @@ import {
 export class Guild {
     @PrimaryGeneratedColumn('uuid')
     @ApiProperty({
-        description: 'Unique UUID of the guild. Mostly for internal usage'
+        description: 'Unique UUID of the guild. Mostly for internal usage',
     })
     @Exclude()
     id!: string;
 
     @OneToMany('Member', 'guild')
     @ApiProperty({
-        description: 'Members of guild'
+        description: 'Members of guild',
     })
     members!: Member[];
 
@@ -34,36 +34,37 @@ export class Guild {
     @Column('varchar', { length: 10, unique: true })
     @Matches(/^[0-9a-zA-Z\-_]{3,10}$/g)
     @ApiProperty({
-        description: 'Unique slug of the guild. Only alphanumeric charaters are allowed with - and _',
-        example: 'guild-42'
+        description:
+            'Unique slug of the guild. Only alphanumeric charaters are allowed with - and _',
+        example: 'guild-42',
     })
-    slug!: string
+    slug!: string;
 
     @Column('bigint', {
         transformer: new ColumnBigintTransformer(),
-        default: 0n
+        default: 0n,
     })
     @Transform(({ value }) => value.toString(10), { toPlainOnly: true })
     @Transform(({ value }) => BigInt(value), { toClassOnly: true })
     @ApiProperty({
-        description: 'Amount of work commited by member'
+        description: 'Amount of work commited by member',
     })
-    work = 0n
+    work = 0n;
 
     @Column('jsonb')
     @ApiProperty({
         description: 'Meta data of the guild. Mostly for external usage',
-        default: {}
+        default: {},
     })
-    meta: Record<string, unknown> = {}
+    meta: Record<string, unknown> = {};
 
     @Column({ nullable: true })
     @Exclude()
-    lastLogin?: number
+    lastLogin?: number;
 
     @Column({ nullable: true })
     @Exclude()
-    salt?: string
+    salt?: string;
 }
 
 @CustomRepository(Guild)

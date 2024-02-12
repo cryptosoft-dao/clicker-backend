@@ -17,7 +17,7 @@ export class WorkResponseDto {
     @IsNumber()
     manTotalWork!: number;
 
-    @IsNumber() 
+    @IsNumber()
     guildTotalWork!: number;
 }
 

@@ -4,18 +4,6 @@
   "sourceRoot": "apps/backend/src",
   "projectType": "application",
   "targets": {
-    "build-configuration": {
-      "executor": "@nx/webpack:webpack",
-      "outputs": [
-        "{options.outputPath}"
-      ],
-      "options": {
-        "outputPath": "dist/apps/typeorm-migration",
-        "main": "apps/backend/src/typeorm.config.ts",
-        "tsConfig": "apps/backend/tsconfig.app.json",
-        "webpackConfig": "apps/backend/webpack.config.js"
-      }
-    },
     "serve": {
       "executor": "@nx/js:node",
       "defaultConfiguration": "development",
@@ -31,6 +19,18 @@
         "production": {
           "buildTarget": "backend:build:production"
         }
+      }
+    },
+    "db": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "ts-node -r tsconfig-paths/register -P apps/backend/tsconfig.app.json ./node_modules/typeorm/cli.js"
+      }
+    },
+    "db-migration": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "nx db backend -- migration:generate -p -d lib/database/src/lib/typeorm.config.ts lib/database/src/lib/migrations/{args.name}"
       }
     }
   },

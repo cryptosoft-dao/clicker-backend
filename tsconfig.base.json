@@ -16,10 +16,12 @@
         "skipDefaultLibCheck": true,
         "baseUrl": ".",
         "paths": {
+            "@aofg/auth": ["lib/auth/src/index.ts"],
             "@aofg/backend-protocol": ["lib/protocols/backend/src/index.ts"],
             "@aofg/configuration": ["lib/configuration/src/index.ts"],
             "@aofg/database": ["lib/database/src/index.ts"],
             "@aofg/guilds": ["lib/guilds/src/index.ts"],
+            "@aofg/helpers": ["lib/helpers/src/index.ts"],
             "@aofg/peoples": ["lib/peoples/src/index.ts"],
             "@aofg/protocol": ["lib/protocol/src/index.ts"],
             "@aofg/typeorm-ext": ["lib/typeorm-ext/src/index.ts"],

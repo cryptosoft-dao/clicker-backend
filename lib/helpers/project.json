@@ -1,0 +1,19 @@
+{
+    "name": "helpers",
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
+    "sourceRoot": "lib/helpers/src",
+    "projectType": "library",
+    "targets": {
+        "build": {
+            "executor": "@nx/js:tsc",
+            "outputs": ["{options.outputPath}"],
+            "options": {
+                "outputPath": "dist/lib/helpers",
+                "main": "lib/helpers/src/index.ts",
+                "tsConfig": "lib/helpers/tsconfig.lib.json",
+                "assets": ["lib/helpers/*.md"]
+            }
+        }
+    },
+    "tags": []
+}

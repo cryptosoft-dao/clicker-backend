@@ -18,12 +18,66 @@ const ConfigurationSchema = Type.Object({
     DB_PASSWORD: Type.String(),
     DB_DATABASE: Type.String(),
     DB_SSL: Type.Boolean(),
+    CORS_ORIGINS: Type.Optional(
+        Type.Union([
+            Type.Literal('*'),
+            Type.Transform(Type.Array(Type.String()))
+                .Decode((v) => v.join(','))
+                .Encode((v) => v.split(',')),
+        ])
+    ),
+    CORS_ALLOWED_HEADERS: Type.Optional(
+        Type.Union([
+            Type.Literal('*'),
+            Type.Transform(Type.Array(Type.String()))
+                .Decode((v) => v.join(','))
+                .Encode((v) => v.split(',')),
+        ])
+    ),
+    CORS_METHODS: Type.Optional(
+        Type.Union([
+            Type.Literal('*'),
+            Type.Transform(
+                Type.Array(
+                    Type.Union([
+                        Type.Literal('POST'),
+                        Type.Literal('GET'),
+                        Type.Literal('OPTION'),
+                        Type.Literal('DELETE'),
+                        Type.Literal('PATCH'),
+                        Type.Literal('PUT'),
+                    ]),
+                    { uniqueItems: true }
+                )
+            )
+                .Decode((v) => v.join(','))
+                .Encode(
+                    (v) =>
+                        v.split(',') as Array<
+                            | 'POST'
+                            | 'GET'
+                            | 'OPTION'
+                            | 'DELETE'
+                            | 'PATCH'
+                            | 'PUT'
+                        >
+                ),
+        ])
+    ),
+    API_PORT: Type.Number(),
+
+    JWT_SECRET: Type.String(),
+    JWT_EXPIRATION: Type.Union([Type.String(), Type.Number()]),
+
+    ADMIN_PASSWORD: Type.String(),
 });
 
 export type ConfigurationSchema = Static<typeof ConfigurationSchema>;
 
-export const ConfigLoader = (config: Record<string, unknown>): ConfigurationSchema => {
-    const converted = Value.Convert(ConfigurationSchema, config)
+export const ConfigLoader = (
+    config: Record<string, unknown>
+): ConfigurationSchema => {
+    const converted = Value.Convert(ConfigurationSchema, config);
     if (Value.Check(ConfigurationSchema, converted)) {
         return converted;
     } else {

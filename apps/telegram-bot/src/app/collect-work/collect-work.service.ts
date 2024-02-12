@@ -21,6 +21,6 @@ export class CollectWorkService {
         });
     }
 
-    @On('test')
+    @On('message_reaction')
     async onReaction() {}
 }

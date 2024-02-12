@@ -7,13 +7,49 @@ import {
     RmqOptions,
     Transport,
 } from '@nestjs/microservices';
+import { CorsOptions } from '@nestjs/common/interfaces/external/cors-options.interface';
+import { JwtModuleOptions } from '@nestjs/jwt';
 
 @Injectable()
 export class ConfigurationService {
-    constructor(private configService: ConfigService<ConfigurationSchema>) {
-        console.log(
-            this.configService.getOrThrow('TELEGRAM_BOT_TOKEN', { infer: true })
-        );
+    constructor(private configService: ConfigService<ConfigurationSchema>) {}
+
+    get admin() {
+        return {
+            password: this.configService.getOrThrow('ADMIN_PASSWORD', { infer: true }),
+        }
+    }
+
+    get jwt(): JwtModuleOptions {
+        return {
+            secret: this.configService.getOrThrow('JWT_SECRET', {
+                infer: true,
+            }),
+            signOptions: {
+                expiresIn: this.configService.getOrThrow('JWT_EXPIRATION', {
+                    infer: true,
+                }),
+            },
+        };
+    }
+
+    get api() {
+        return {
+            port: this.configService.getOrThrow('API_PORT', { infer: true }),
+        };
+    }
+
+    get cors(): CorsOptions {
+        return {
+            origin:
+                this.configService.get('CORS_ORIGINS', { infer: true }) ?? true,
+            allowedHeaders:
+                this.configService.get('CORS_ALLOWED_HEADERS', {
+                    infer: true,
+                }) ?? '*',
+            methods:
+                this.configService.get('CORS_METHODS', { infer: true }) ?? '*',
+        };
     }
 
     get db() {

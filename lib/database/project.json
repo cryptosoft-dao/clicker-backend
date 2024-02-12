@@ -4,6 +4,18 @@
     "sourceRoot": "lib/database/src",
     "projectType": "library",
     "targets": {
+        "db": {
+          "executor": "nx:run-commands",
+          "options": {
+            "command": "ts-node -r tsconfig-paths/register -P apps/backend/tsconfig.app.json ./node_modules/typeorm/cli.js"
+          }
+        },
+        "db-migration": {
+          "executor": "nx:run-commands",
+          "options": {
+            "command": "nx db backend -- migration:generate -p -d apps/backend/src/app/database/database-connection.ts apps/backend/src/app/database/migration/{args.name}"
+          }
+        }
     },
     "tags": []
 }

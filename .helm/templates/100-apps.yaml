@@ -2,94 +2,94 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: "aofg"
-  namespace: "{{ $.Release.Namespace }}"
-  labels:
-    service: "aofg"
+    name: 'aofg'
+    namespace: '{{ $.Release.Namespace }}'
+    labels:
+        service: 'aofg'
 spec:
-  replicas: 1
-  minReadySeconds: 15
-  selector:
-    matchLabels:
-      service: "aofg"
-  template:
-    metadata:
-      labels:
-        service: "aofg"
-    spec:
-      containers:
-        - name: service
-          image: {{ $.Values.image }}
-          livenessProbe:
-            exec:
-              command: [ "/bin/sh", "/app/bin/liveness.sh" ]
-            initialDelaySeconds: 5
-            periodSeconds: 5
-            timeoutSeconds: 5
-          readinessProbe:
-            exec:
-              command: [ "/bin/sh", "/app/bin/readiness.sh" ]
-            initialDelaySeconds: 5
-            periodSeconds: 5
-            timeoutSeconds: 5
-          env:
-            - name: CORS_ORIGINS
-              value: '*'
-          envFrom:
-            - secretRef:
-                name: aofg-env
-                optional: false
-          resources:
-            limits:
-              cpu: 4000m
-              memory: 4096Mi
-            requests:
-              cpu: 200m
-              memory: 256Mi
-          ports:
-            - name: "http"
-              containerPort: 3333
+    replicas: 1
+    minReadySeconds: 15
+    selector:
+        matchLabels:
+            service: 'aofg'
+    template:
+        metadata:
+            labels:
+                service: 'aofg'
+        spec:
+            containers:
+                - name: service
+                  image: { { $.Values.image } }
+                  livenessProbe:
+                      exec:
+                          command: ['/bin/sh', '/app/bin/liveness.sh']
+                      initialDelaySeconds: 5
+                      periodSeconds: 5
+                      timeoutSeconds: 5
+                  readinessProbe:
+                      exec:
+                          command: ['/bin/sh', '/app/bin/readiness.sh']
+                      initialDelaySeconds: 5
+                      periodSeconds: 5
+                      timeoutSeconds: 5
+                  env:
+                      - name: CORS_ORIGINS
+                        value: '*'
+                  envFrom:
+                      - secretRef:
+                            name: aofg-env
+                            optional: false
+                  resources:
+                      limits:
+                          cpu: 4000m
+                          memory: 4096Mi
+                      requests:
+                          cpu: 200m
+                          memory: 256Mi
+                  ports:
+                      - name: 'http'
+                        containerPort: 3333
 
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: "aofg"
-  namespace: "{{ $.Release.Namespace }}"
+    name: 'aofg'
+    namespace: '{{ $.Release.Namespace }}'
 spec:
-  type: ClusterIP
-  selector:
-    service: "aofg"
-  ports:
-    - port: 80
-      targetPort: 3333
-      name: "http"
+    type: ClusterIP
+    selector:
+        service: 'aofg'
+    ports:
+        - port: 80
+          targetPort: 3333
+          name: 'http'
 
 ---
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
-  name: "aofg"
-  namespace: "{{ $.Release.Namespace }}"
+    name: 'aofg'
+    namespace: '{{ $.Release.Namespace }}'
 spec:
-  entryPoints:
-    - websecure
-  routes:
-    - match: "Host(`aofg.{{ $.Release.Namespace }}.tookey.cloud`)"
-      kind: Rule
-      middlewares:
-        - name: allow-cors
-          namespace: {{ $.Release.Namespace }}
-      services:
-        - name: aofg
-          port: 80
-    - match: "Host(`api.{{ $.Release.Namespace }}.aofg.io`)"
-      kind: Rule
-      middlewares:
-        - name: allow-cors
-          namespace: {{ $.Release.Namespace }}
-      services:
-        - name: aofg
-          port: 80
-  tls:
-    certResolver: main-le
+    entryPoints:
+        - websecure
+    routes:
+        - match: 'Host(`aofg.{{ $.Release.Namespace }}.tookey.cloud`)'
+          kind: Rule
+          middlewares:
+              - name: allow-cors
+                namespace: { { $.Release.Namespace } }
+          services:
+              - name: aofg
+                port: 80
+        - match: 'Host(`api.{{ $.Release.Namespace }}.aofg.io`)'
+          kind: Rule
+          middlewares:
+              - name: allow-cors
+                namespace: { { $.Release.Namespace } }
+          services:
+              - name: aofg
+                port: 80
+    tls:
+        certResolver: main-le

@@ -16,7 +16,7 @@ USER root
 WORKDIR /app
 
 COPY ./dist/apps/backend .
-COPY package.json package-lock.json ./
+COPY ./package.json ./package-lock.json ./
 RUN npm install --frozen-lockfile
 RUN chown 101:101 -R /app && \
     rm -rf /root/.npm

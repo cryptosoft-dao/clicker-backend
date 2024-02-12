@@ -1,6 +1,6 @@
 {
   "name": "@aofg/source",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "license": "MIT",
   "scripts": {
     "dev": "cross-env FORCE_COLOR=true && concurrently -n \"FRONT,BACKE,TELEG,DISCO\" -c \"bgBlue.bold,bgGreen.bold,bgRed.bold,bgYellow.bold\" \"npm:serve:frontend\" \"npm:serve:backend\" \"npm:serve:telegram\" \"npm:serve:discord\"",

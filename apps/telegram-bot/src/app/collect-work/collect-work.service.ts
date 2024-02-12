@@ -20,7 +20,4 @@ export class CollectWorkService {
             disable_notification: true,
         });
     }
-
-    @On('message_reaction')
-    async onReaction() {}
 }

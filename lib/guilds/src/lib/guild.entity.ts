@@ -2,23 +2,19 @@ import { Member } from '@aofg/peoples';
 import { ColumnBigintTransformer, CustomRepository } from '@aofg/typeorm-ext';
 import { ApiProperty } from '@nestjs/swagger';
 import { Exclude, Transform } from 'class-transformer';
-import { IsAlphanumeric, Matches } from 'class-validator';
+import { Matches } from 'class-validator';
 import {
     Column,
     DeepPartial,
     Entity,
     EntityManager,
     Index,
-    JoinColumn,
-    JoinTable,
-    ManyToMany,
-    ManyToOne,
     OneToMany,
     PrimaryGeneratedColumn,
-    Repository,
+    Repository
 } from 'typeorm';
 
-@Entity()
+@Entity('Guild')
 @Index(['slug', 'salt'], { unique: true })
 export class Guild {
     @PrimaryGeneratedColumn('uuid')
@@ -28,7 +24,7 @@ export class Guild {
     @Exclude()
     id!: string;
 
-    @OneToMany(() => Member, (member) => member.guild)
+    @OneToMany('Member', 'guild')
     @ApiProperty({
         description: 'Members of guild'
     })
@@ -52,7 +48,7 @@ export class Guild {
     @ApiProperty({
         description: 'Amount of work commited by member'
     })
-    work: bigint = 0n
+    work = 0n
 
     @Column('jsonb')
     @ApiProperty({

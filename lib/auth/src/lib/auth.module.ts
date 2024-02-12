@@ -1,16 +1,14 @@
-import { Body, Controller, Module, Post } from '@nestjs/common';
-import { AuthService } from './auth/auth.service';
-import { JwtModule } from '@nestjs/jwt';
 import { ConfigurationModule, ConfigurationService } from '@aofg/configuration';
-import { PassportModule } from '@nestjs/passport'
-import { JwtStrategy } from './strategies/jwt.strategy';
+import { Body, Controller, Module, Post } from '@nestjs/common';
+import { JwtModule } from '@nestjs/jwt';
+import { PassportModule } from '@nestjs/passport';
 import { AdminLoginDto } from './auth.dto';
-import { TypeOrmExModule } from '@aofg/typeorm-ext';
-import { GuildRepository } from '@aofg/guilds';
+import { AuthService } from './auth/auth.service';
+import { JwtStrategy } from './strategies/jwt.strategy';
 
-export * from './auth.dto'
-export * from './decorators'
-export * from './auth/auth.service'
+export * from './auth.dto';
+export * from './auth/auth.service';
+export * from './decorators';
 
 
 @Controller('auth')

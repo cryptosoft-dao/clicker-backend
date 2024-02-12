@@ -1,10 +1,17 @@
-import { ColumnBigintTransformer, CustomRepository } from '@aofg/typeorm-ext'
-import { BeforeInsert, BeforeUpdate, Column, DeepPartial, Entity, EntityManager, Index, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn, Repository, Tree, TreeChildren, TreeParent, Unique } from 'typeorm'
-import { Exclude, Expose, Transform } from 'class-transformer'
-import { Guild } from '@aofg/guilds'
+import { ColumnBigintTransformer, CustomRepository } from '@aofg/typeorm-ext';
 import { ApiProperty } from '@nestjs/swagger';
+import { Exclude, Transform } from 'class-transformer';
+import { BeforeInsert, BeforeUpdate, Column, DeepPartial, Entity, EntityManager, Index, JoinTable, ManyToOne, PrimaryGeneratedColumn, Repository, Tree, TreeChildren, TreeParent, Unique } from 'typeorm';
 
-@Entity()
+
+type GuildLike = {
+    id: string
+    slug: string
+    work: bigint
+    meta: Record<string, unknown>
+}
+
+@Entity('Member')
 @Tree('materialized-path')
 @Unique('guild-external-id', ['guildId', 'externalId'])
 @Index(['guild', 'externalId'])
@@ -29,7 +36,7 @@ export class Member {
     @ApiProperty({
         description: 'Amount of work commited by member'
     })
-    work: bigint = 0n
+    work = 0n
 
     @Index()
     @Column('bigint', {
@@ -41,11 +48,11 @@ export class Member {
     @ApiProperty({
         description: 'Amount of work earned by member from referrals'
     })
-    referralWork: bigint = 0n
+    referralWork = 0n
 
-    @ManyToOne(() => Guild, (guild) => guild.members)
+    @ManyToOne('Guild', 'members')
     @JoinTable({ name: 'guildId' })
-    guild!: Guild
+    guild!: GuildLike
 
     @Index()
     @Column('uuid')
@@ -69,7 +76,7 @@ export class Member {
     @ApiProperty({
         description: 'Total amount of work commited by member and its referrals'
     })
-    totalWork: bigint = 0n
+    totalWork = 0n
 
     @Column('jsonb')
     @ApiProperty({
@@ -78,12 +85,12 @@ export class Member {
     })
     meta: Record<string, unknown> = {}
 
-    @Column()
+    @Column('integer', { default: 0 })
     @ApiProperty({
         description: 'Amount of referrals invited by member',
         default: 0
     })
-    referralCount: number = 0
+    referralCount = 0
     
     @BeforeInsert()
     @BeforeUpdate()

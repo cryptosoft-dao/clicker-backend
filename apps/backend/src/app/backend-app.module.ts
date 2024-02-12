@@ -6,7 +6,6 @@ import { CacheController } from './cache/cache.controller';
 import { CacheService } from './cache/cache.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DatabaseModule, DatabaseService } from '@aofg/database';
-import { WorkModule } from '@aofg/work';
 import { GuildsModule } from '@aofg/guilds';
 import { PeoplesModule } from '@aofg/peoples';
 import { AuthModule } from '@aofg/auth';
@@ -19,7 +18,6 @@ import { AuthModule } from '@aofg/auth';
             useExisting: DatabaseService,
         }),
         AuthModule,
-        WorkModule,
         GuildsModule,
         PeoplesModule,
     ],

@@ -1,5 +1,10 @@
-import { defined } from '@aofg/helpers';
-import { MemberRepository, PeopleService, PeoplesModule } from '@aofg/peoples';
+import { JwtAuth, Pricipal, PricipalDto } from '@aofg/auth';
+import {
+    Member,
+    MemberRepository,
+    PeopleService,
+    PeoplesModule,
+} from '@aofg/peoples';
 import { TypeOrmExModule, inTransaction } from '@aofg/typeorm-ext';
 import {
     BadRequestException,
@@ -18,17 +23,14 @@ import {
     UnauthorizedException,
 } from '@nestjs/common';
 import { ApiOperation, ApiParam, ApiQuery } from '@nestjs/swagger';
-import { DataSource, FindOneOptions, QueryFailedError } from 'typeorm';
+import { DataSource, EntityManager, QueryFailedError } from 'typeorm';
 import {
     CommitWorkDto,
     CreateNewGuildDto,
     InviteToGuildDto,
     UpdateMetaDto,
 } from './guild.dto';
-import { Guild, GuildRepository } from './guild.entity';
-import { MoreThanOrEqual } from 'typeorm';
-import { WorkModule, WorkService } from '@aofg/work';
-import { JwtAuth, Pricipal, PricipalDto } from '@aofg/auth';
+import { GuildRepository } from './guild.entity';
 
 export * from './guild.entity';
 
@@ -39,23 +41,98 @@ export class GuildsService {
         private readonly guilds: GuildRepository,
         private readonly members: MemberRepository,
         private readonly people: PeopleService,
-        private readonly work: WorkService
     ) {}
 
-    public async commitWork(
+    checkAccess(principal: PricipalDto, slug: string) {
+        if (principal.slug !== slug) {
+            throw new UnauthorizedException('Invalid guild');
+        }
+        return this.getGuild(slug).then((guild) => {
+            if (guild.salt !== principal.salt) {
+                throw new UnauthorizedException('Salt mismatch');
+            }
+        });
+    }
+
+    private async processWork(
+        entityManager: EntityManager,
         slug: string,
         externalId: string,
-        commit: CommitWorkDto
+        work: bigint,
+        rewardParents: bigint[],
+        bonus: boolean
     ) {
-        return inTransaction(this.dataSource, (entityManager) =>
-            this.work.commitWork(
+        const member = await entityManager.findOne(Member, {
+            where: {
+                externalId,
+                guild: { slug },
+            },
+            relations: ['guild', 'parent'],
+        });
+
+        if (!member) {
+            throw new NotFoundException('Member not found');
+        }
+
+        console.log(`Processing ${work} work commit for member ${externalId}`);
+
+        if (!bonus) member.work += work;
+        else member.referralWork += work;
+        member.guild.work += work;
+
+        await entityManager.save(member);
+        await entityManager.save(member.guild);
+
+        if (rewardParents && rewardParents.length > 0 && member.parent) {
+            const reward = rewardParents.shift()!;
+            await this.processWork(
+                entityManager,
+                slug,
+                member.parent.externalId,
+                reward,
+                rewardParents,
+                true
+            );
+        }
+
+        return member;
+    }
+
+    async commitWork(
+        slug: string,
+        externalId: string,
+        work: bigint,
+        rewardParents: bigint[]
+    ) {
+        return inTransaction(this.dataSource, async (entityManager) => {
+            const referralDepth = rewardParents.length;
+
+            await this.processWork(
                 entityManager,
                 slug,
                 externalId,
-                BigInt(commit.work),
-                commit.rewardParents.map(BigInt)
-            )
-        );
+                work,
+                rewardParents,
+                false
+            );
+
+            const relations = [
+                'guild',
+                ...Array.from(Array(referralDepth), (_, i) =>
+                    Array.from(Array(i + 1), () => 'parent').join('.')
+                ),
+            ];
+
+            console.log(relations);
+
+            return this.members.findOne({
+                where: {
+                    externalId,
+                    guild: { slug },
+                },
+                relations,
+            });
+        });
     }
 
     public async updateMemberMeta(
@@ -342,16 +419,13 @@ export class GuildsController {
         example: '123456',
         description: 'External ID of the member',
     })
-    public updateMemberMeta(
+    public async updateMemberMeta(
         @Pricipal() principal: PricipalDto,
         @Param('slug') slug: string,
         @Param('externalId') externalId: string,
         @Body() { meta }: UpdateMetaDto
     ) {
-        if (principal.slug !== slug) {
-            throw new UnauthorizedException('Invalid guild');
-        }
-        
+        await this.guildService.checkAccess(principal, slug);
         return this.guildService.updateMemberMeta(slug, externalId, meta);
     }
 
@@ -407,15 +481,13 @@ export class GuildsController {
         example: '123456',
         description: 'External ID of the member',
     })
-    public inviteToGuild(
+    public async inviteToGuild(
         @Pricipal() principal: PricipalDto,
         @Param('slug') slug: string,
         @Param('externalId') externalId: string,
         @Body() dto: InviteToGuildDto
     ) {
-        if (principal.slug !== slug) {
-            throw new UnauthorizedException('Invalid guild');
-        }
+        await this.guildService.checkAccess(principal, slug);
         return this.guildService.invite(
             slug,
             externalId,
@@ -444,17 +516,20 @@ export class GuildsController {
         example: '123456',
         description: 'External ID of the member',
     })
-    public commitWork(
+    public async commitWork(
         @Pricipal() principal: PricipalDto,
         @Param('slug') slug: string,
         @Param('externalId') externalId: string,
         @Body() commit: CommitWorkDto
     ) {
-        if (principal.slug !== slug) {
-            throw new UnauthorizedException('Invalid guild');
-        }
+        await this.guildService.checkAccess(principal, slug);
 
-        return this.guildService.commitWork(slug, externalId, commit);
+        return this.guildService.commitWork(
+            slug,
+            externalId,
+            BigInt(commit.work),
+            commit.rewardParents.map((r) => BigInt(r))
+        );
     }
 }
 
@@ -465,7 +540,6 @@ export class GuildsController {
             MemberRepository,
         ]),
         PeoplesModule,
-        WorkModule,
     ],
     controllers: [GuildsController],
     providers: [GuildsService],

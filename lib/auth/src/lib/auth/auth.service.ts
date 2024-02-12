@@ -4,7 +4,6 @@ import { AdminLoginDto } from '../auth.dto';
 import { ConfigurationService } from '@aofg/configuration';
 import { inTransaction } from '@aofg/typeorm-ext';
 import { DataSource } from 'typeorm';
-import { Guild } from '@aofg/guilds';
 
 @Injectable()
 export class AuthService {
@@ -23,7 +22,7 @@ export class AuthService {
 
         return inTransaction(this.dataSource, async (manager) =>
             manager.update(
-                Guild,
+                'Guild',
                 { slug },
                 { lastLogin: Math.floor(new Date().getTime() / 1000), salt }
             )

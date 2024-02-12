@@ -1,38 +1,42 @@
 {
-  "name": "backend",
-  "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "apps/backend/src",
-  "projectType": "application",
-  "targets": {
-    "serve": {
-      "executor": "@nx/js:node",
-      "defaultConfiguration": "development",
-      "options": {
-        "buildTarget": "backend:build"
-      },
-      "configurations": {
-        "development": {
-          "buildTarget": "backend:build:development",
-          "inspect": true,
-          "port": 9230
+    "name": "backend",
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
+    "sourceRoot": "apps/backend/src",
+    "projectType": "application",
+    "targets": {
+        "serve": {
+            "executor": "@nx/js:node",
+            "defaultConfiguration": "development",
+            "options": {
+                "buildTarget": "backend:build"
+            },
+            "configurations": {
+                "development": {
+                    "buildTarget": "backend:build:development",
+                    "inspect": true,
+                    "port": 9230
+                },
+                "production": {
+                    "buildTarget": "backend:build:production"
+                }
+            }
         },
-        "production": {
-          "buildTarget": "backend:build:production"
+        "db": {
+            "executor": "nx:run-commands",
+            "options": {
+                "command": "ts-node -r tsconfig-paths/register -P apps/backend/tsconfig.app.json ./node_modules/typeorm/cli.js"
+            }
+        },
+        "db-migration": {
+            "executor": "nx:run-commands",
+            "options": {
+                "command": "nx db backend -- migration:generate -p -d lib/database/src/lib/typeorm.config.ts lib/database/src/lib/migrations/{args.name}"
+            }
+        },
+        "docker-build": {
+            "dependsOn": ["build"],
+            "command": "docker build -f apps/backend/Dockerfile . -t backend"
         }
-      }
     },
-    "db": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "ts-node -r tsconfig-paths/register -P apps/backend/tsconfig.app.json ./node_modules/typeorm/cli.js"
-      }
-    },
-    "db-migration": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "nx db backend -- migration:generate -p -d lib/database/src/lib/typeorm.config.ts lib/database/src/lib/migrations/{args.name}"
-      }
-    }
-  },
-  "tags": []
+    "tags": []
 }

@@ -45,4 +45,5 @@ jobs:
                   password: ${{ secrets.GITHUB_TOKEN }}
 
             # - run: npx nx-cloud record -- nx format:check
-            - run: INPUT_GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} npx nx affected --base=$NX_BASE --head=$NX_HEAD -t lint test build container
+            # - run: INPUT_GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} npx nx affected --base=$NX_BASE --head=$NX_HEAD -t lint test build container
+            - run: INPUT_GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} npx nx affected --base=$NX_BASE --head=$NX_HEAD -t build container

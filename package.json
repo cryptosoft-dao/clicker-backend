@@ -27,7 +27,7 @@
     "@nestjs/typeorm": "^10.0.2",
     "@nx/nest": "^18.0.0",
     "@sinclair/typebox": "^0.32.13",
-    "@telegraf/types": "git+https://github.com/telegraf/types.git#feat/api-7.0",
+    "@telegraf/types": "git+https://github.com/telegraf/types.git#6dfcdde6651f282fb623750b035e73c1974be4a0",
     "amqp-connection-manager": "^4.1.14",
     "amqplib": "^0.10.3",
     "axios": "^1.6.0",

@@ -47,7 +47,9 @@
             "options": {
                 "engine": "docker",
                 "metadata": {
-                    "images": "ghcr.io/aofg/backend",
+                    "images": [
+                        "ghcr.io/aofg/backend"
+                    ],
                     "load": true,
                     "push": true,
                     "cache-from": [

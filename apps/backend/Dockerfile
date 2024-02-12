@@ -1,30 +1,21 @@
-# builder stage named "deps"
-FROM node:20 as deps
-RUN apt-get install -y git python3 libpq-dev dumb-init libc6-amd64-cross
+# Install dependencies only when needed
+FROM docker.io/node:lts-alpine as deps
+# Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
+RUN apk add --no-cache libc6-compat
+WORKDIR /usr/src/app
+COPY dist/apps/backend/package*.json ./
+RUN npm install --omit=dev
 
-RUN ln -s /usr/x86_64-linux-gnu/lib64/ /lib64
-
-ENV LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/lib64:/usr/x86_64-linux-gnu/lib"
-
-WORKDIR /app
-COPY ./package*.json .
-
-# install extracted deps
-RUN npm install
-
-# install additional deps
-RUN npm install reflect-metadata tslib rxjs pg
-
-# runner stage
-FROM node:20 as runner
-WORKDIR /app
-# pull in packages from builder stage
-COPY --from=deps /app/node_modules ./node_modules
-COPY --from=deps /app/package.json ./package.json
-
-# copy local, compiled app
+# Production image, copy all the files and run nest
+FROM docker.io/node:lts-alpine as runner
+RUN apk add --no-cache dumb-init
+ENV NODE_ENV production
+ENV PORT 3000
+WORKDIR /usr/src/app
+COPY --from=deps /usr/src/app/node_modules ./node_modules
+COPY --from=deps /usr/src/app/package.json ./package.json
 COPY dist/apps/backend .
 RUN chown -R node:node .
 USER node
-
+EXPOSE 3000
 CMD ["dumb-init", "node", "main.js"]

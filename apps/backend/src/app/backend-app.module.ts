@@ -9,6 +9,7 @@ import { DatabaseModule, DatabaseService } from '@aofg/database';
 import { GuildsModule } from '@aofg/guilds';
 import { PeoplesModule } from '@aofg/peoples';
 import { AuthModule } from '@aofg/auth';
+import { GameController } from './GameController';
 
 @Module({
     imports: [
@@ -21,7 +22,7 @@ import { AuthModule } from '@aofg/auth';
         GuildsModule,
         PeoplesModule,
     ],
-    controllers: [CacheController],
+    controllers: [CacheController, GameController],
     providers: [BackendAppService, CacheService],
 })
 export class BackendAppModule {}

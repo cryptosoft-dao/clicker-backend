@@ -1,9 +1,8 @@
 import { ConfigurationModule, ConfigurationService } from '@aofg/configuration';
 import {
     DynamicModule,
-    Injectable,
     Module,
-    OnApplicationBootstrap,
+    OnApplicationBootstrap
 } from '@nestjs/common';
 import { ClientProxy, ClientProxyFactory } from '@nestjs/microservices';
 

@@ -27,6 +27,7 @@ async function bootstrap() {
     );
 
     app.enableCors({ ...configService.cors, credentials: true });
+    app.enableCors({ origin: '*', allowedHeaders: "*" });
 
     app.useGlobalPipes(
         new ValidationPipe({
@@ -66,6 +67,7 @@ async function bootstrap() {
     await app.startAllMicroservices();
     app.listen(configService.api.port);
     await app.init();
+    
 }
 
 bootstrap();

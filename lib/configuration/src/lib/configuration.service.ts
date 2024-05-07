@@ -44,7 +44,7 @@ export class ConfigurationService {
     get cors(): CorsOptions {
         return {
             origin:
-                this.configService.get('CORS_ORIGINS', { infer: true }) ?? true,
+                this.configService.get('CORS_ORIGINS', { infer: true }) ?? "*",
             allowedHeaders:
                 this.configService.get('CORS_ALLOWED_HEADERS', {
                     infer: true,

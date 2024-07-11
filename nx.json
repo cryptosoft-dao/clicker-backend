@@ -33,18 +33,8 @@
                 "componentTestingTargetName": "component-test"
             }
         },
-        {
-            "plugin": "@nx/jest/plugin",
-            "options": {
-                "targetName": "test"
-            }
-        },
-        {
-            "plugin": "@nx/eslint/plugin",
-            "options": {
-                "targetName": "lint"
-            }
-        },
+        { "plugin": "@nx/jest/plugin", "options": { "targetName": "test" } },
+        { "plugin": "@nx/eslint/plugin", "options": { "targetName": "lint" } },
         {
             "plugin": "@nx/webpack/plugin",
             "options": {
@@ -71,12 +61,7 @@
         }
     },
     "generators": {
-        "@nx/next": {
-            "application": {
-                "style": "css",
-                "linter": "eslint"
-            }
-        }
+        "@nx/next": { "application": { "style": "css", "linter": "eslint" } }
     },
-    "nxCloudAccessToken": "OTljOTU5YzctMTQ3MS00N2U4LWFkM2UtMDhmZTU0ZjM2YzAxfHJlYWQtd3JpdGU="
+    "nxCloudAccessToken": "ZDQwZTIwNjktYjc1NC00ZWE1LWE0YzEtZjA4MzVjYzY1ODYyfHJlYWQtd3JpdGU="
 }
